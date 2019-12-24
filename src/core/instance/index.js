@@ -33,7 +33,7 @@ stateMixin(Vue)
 // NOTE: CORE INIT event，包括 $on, $emit, $off, $once
 eventsMixin(Vue)
 
-// NOTE: CORE INIT lifecycle, 包括 _update，forceUpdate, destory
+// NOTE: CORE INIT lifecycle, 包括 _update，$forceUpdate, $destory
 lifecycleMixin(Vue)
 
 // NOTE: CORE INIT render，包括 _render 方法

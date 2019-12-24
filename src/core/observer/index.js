@@ -49,6 +49,8 @@ export class Observer {
     this.vmCount = 0
     def(value, '__ob__', this)
 
+    console.log('new Observer=>', value);
+
     // NOTE: CORE FUNCTION value 只有可能是数组和对象
     if (Array.isArray(value)) {
       // NOTE: CORE FUNCTION array 将自定义方法放到原型上面
@@ -124,6 +126,8 @@ export function observe(value: any, asRootData: ?boolean): Observer | void {
     return
   }
 
+  console.log('**observe value**', value);
+
   let ob: Observer | void
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
@@ -169,17 +173,19 @@ export function defineReactive(
   }
 
   let childOb = !shallow && observe(val)
+
+  console.log('**defineReactive** obj=>%s key=>%s val=>%s', obj, key, val)
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter() {
       const value = getter ? getter.call(obj) : val
 
-      debugger
       // QUESTION: DEP 这里什么意思，全局变量？
       // NOTE: DEP !depend 依赖收集
       // NOTE: DEP 513 getter value
       if (Dep.target) {
+        console.log('!object get dep key=>%s dep=>%o ADD  watch=>%o', key, dep,Dep.target);
         dep.depend()
         if (childOb) {
           childOb.dep.depend()

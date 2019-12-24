@@ -222,6 +222,7 @@ export function mountComponent (
   // NOTE: REDNER FLOW 1 init updateComponent render
   // NOTE: DEP 7 初始化完成，建立 watcher
   // NOTE: CORE FLOW 10 render 并 update
+  console.log('new Watcher $mount');
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted && !vm._isDestroyed) {
@@ -378,7 +379,7 @@ export function callHook (vm: Component, hook: string) {
 
   pushTarget(null,`hook:${hook}`,)
   const handlers = vm.$options[hook]
-  console.log('hook=>', hook, 'count=>', count++)
+  console.log(count++,'lifeCycle-hook=>', hook)
   const info = `${hook} hook`
   if (handlers) {
     for (let i = 0, j = handlers.length; i < j; i++) {

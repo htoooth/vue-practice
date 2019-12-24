@@ -50,7 +50,9 @@ export default class Watcher {
     options?: ?Object,
     isRenderWatcher?: boolean
   ) {
-    debugger;
+
+    console.log('new Watcher() expOrFn=>%s cb=>%s', expOrFn, cb)
+
     this.vm = vm
     if (isRenderWatcher) {
       // NOTE: REDNER FLOW 2 init render render watcher
@@ -109,12 +111,13 @@ export default class Watcher {
     // NOTE: CORE FUNCTION 添加依赖
     // NOTE: REDNER FLOW 4 设置全局变量初始化 watcher
     // NOTE: DEP 54 set Dep.target = this
-    pushTarget(this, 'watcher')
+    pushTarget(this, 'watcher:get')
     let value
     const vm = this.vm
     try {
       // NOTE: REDNER FLOW 5 render 渲染出dom
       // NOTE: DEP 55 getter 求值
+      console.log('watcher getter call => %s', this.expression)
       value = this.getter.call(vm, vm)
     } catch (e) {
       if (this.user) {
@@ -130,7 +133,7 @@ export default class Watcher {
       }
       // NOTE: REDNER FLOW 6 移出 watcher
       // NOTE: DEP 56 set Dep.target = null
-      popTarget('watcher')
+      popTarget('watcher:get')
       this.cleanupDeps()
     }
     return value
@@ -144,6 +147,7 @@ export default class Watcher {
     if (!this.newDepIds.has(id)) {
       this.newDepIds.add(id)
       this.newDeps.push(dep)
+      console.log('watcher dep add watcher=>%o addDep dep=>%o', this, dep)
       if (!this.depIds.has(id)) {
         dep.addSub(this)
       }
@@ -235,10 +239,12 @@ export default class Watcher {
    */
   // NOTE: DEP 58 update dep
   depend () {
+    console.log('watch dep start');
     let i = this.deps.length
     while (i--) {
       this.deps[i].depend()
     }
+    console.log('watch dep end');
   }
 
   /**

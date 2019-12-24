@@ -71,7 +71,7 @@ export function initState (vm: Component) {
   if (opts.computed) initComputed(vm, opts.computed)
 
   // NOTE: CORE INIT MIXIN STATE watch 初始化
-  // NOTE: DEP 6 $watch 建立
+  // NOTE: DEP 6 watch 建立
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch)
   }
@@ -90,6 +90,7 @@ function initProps (vm: Component, propsOptions: Object) {
   }
   for (const key in propsOptions) {
     keys.push(key)
+    console.log('props init key=>', key)
     const value = validateProp(key, propsOptions, propsData, vm)
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
@@ -167,9 +168,11 @@ function initData (vm: Component) {
       proxy(vm, `_data`, key)
     }
   }
+
+  console.log('data init =>', keys)
   // observe data
   // QUESTION: DEP observe， proxy, defineReactive 的区别和联系
-      // NOTE: DEP 41 data observe 的设置
+  // NOTE: DEP 41 data observe 的设置
   observe(data, true /* asRootData */)
 }
 
@@ -209,7 +212,7 @@ function initComputed (vm: Component, computed: Object) {
     if (!isSSR) {
       // create internal watcher for the computed property.
 
-      console.log('watcher=>', key)
+      console.log('computed init =>', key)
       // NOTE: DEP 52 watch computed
       watchers[key] = new Watcher(
         vm,
@@ -223,7 +226,7 @@ function initComputed (vm: Component, computed: Object) {
     // component prototype. We only need to define computed properties defined
     // at instantiation here.
     if (!(key in vm)) {
-      // NOTE: DEP 57 definedComputed in vm
+      // NOTE: DEP 57 definedComputed in vm  === proxy
       defineComputed(vm, key, userDef)
     } else if (process.env.NODE_ENV !== 'production') {
       if (key in vm.$data) {
@@ -273,19 +276,15 @@ function createComputedGetter (key) {
     const watcher = this._computedWatchers && this._computedWatchers[key]
 
     // NOTE: DEP 59 watcher value
-
-    debugger
     if (watcher) {
       if (watcher.dirty) {
+        console.log('computed get value key=>', key)
         // NOTE: DEP 510 data getter
         watcher.evaluate()
-        console.log('computed get value key=>', key, Dep.target ? true: false)
       }
       if (Dep.target) {
-
-        console.log('computed dep key=>', key, Dep.target ? true: false)
+        console.log('!computed get dep key=>%s dep=>%o Add watcher=>%o', key, watcher, Dep.target)
         // NOTE: DEP 511 depend
-        debugger
         watcher.depend()
       }
       return watcher.value
@@ -403,6 +402,7 @@ export function stateMixin (Vue: Class<Component>) {
     options?: Object
   ): Function {
     const vm: Component = this
+    console.log('$watch init exp=>%s cb=>%s options=>%o', expOrFn, cb, options);
     if (isPlainObject(cb)) {
       return createWatcher(vm, expOrFn, cb, options)
     }
