@@ -42,7 +42,7 @@
     "release:weex": "bash scripts/release-weex.sh",
     "release:note": "node scripts/gen-release-note.js",
     "commit": "git-cz",
-    "serve": "http-server -c-1"
+    "serve": "http-server -c-1 & open-cli http://127.0.0.1:8080"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",

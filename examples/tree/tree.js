@@ -24,16 +24,16 @@ const vm = new Vue({
 }).$mount('#demo')
 
 
-// setTimeout(() => {
-//   vm.a = 2
-// }, 2000)
+setTimeout(() => {
+  vm.a = 2
+}, 2000)
 
-window.vueVisiable = {
-  Dep: {
-    target: null,
-    targetStack: []
-  }
-};
+// window.vueVisiable = {
+//   Dep: {
+//     target: null,
+//     targetStack: []
+//   }
+// };
 
 // let Child = {
 //   name: 'child',
