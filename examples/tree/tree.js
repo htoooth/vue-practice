@@ -1,32 +1,43 @@
 // demo data
 // boot up the demo
-const vm = new Vue({
-  template: '<div>{{ c.x }}</div>',
-  data: {
-    a: 1,
-    d: 2
-  },
-  computed: {
-    b() {
-      return this.a + 1;
-    },
-    c() {
-      return {
-        x: this.b + 1
-      };
-    }
-  },
-  watch: {
-    a() {
-      this.d = 1;
-    }
-  }
-}).$mount('#demo')
+// vm <- getA <- a
+// pushTarget => Dep.target = vm
+// d <- watch <- a
+// const vm = new Vue({
+//   template: '<div>{{ getA() }}</div>',
+//   data: {
+//     a: 1,
+//     d: 2
+//   },
+//   mounted() {
+//     this.a++
+//   },
+//   methods: {
+//     getA() {
+//       return this.a
+//     }
+//   },
+//   computed: {
+//     b() {
+//       return this.a + 1;
+//     },
+//     c() {
+//       return {
+//         x: this.b + 1
+//       };
+//     }
+//   },
+//   watch: {
+//     d() {
+//       this.a = 1;
+//     }
+//   }
+// }).$mount('#demo')
 
 
-setTimeout(() => {
-  vm.a = 2
-}, 2000)
+// setTimeout(() => {
+//   vm.a = 2
+// }, 2000)
 
 // window.vueVisiable = {
 //   Dep: {
@@ -85,3 +96,39 @@ setTimeout(() => {
 // setTimeout(() => {
 //   vm.a = 3
 // }, 3000)
+
+var a = {
+  b() {
+    return this
+  }
+}
+
+var b = {
+  b: () => {
+    eval('console.log(this)')
+    return this
+  }
+}
+
+console.log('a.b=>', a.b())
+console.log('b.b=>',b.b())
+var c = b.b.bind(a)
+
+var x = {
+  y:c
+}
+
+console.log('b.b.bind(a)=>',c())
+console.log('x.y()=>', x.y())
+
+(
+  () => {
+    console.log('out=>',(() => console.log('this=>',this))())
+  }
+)()
+
+this
+
+window
+
+this

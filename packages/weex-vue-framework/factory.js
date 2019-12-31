@@ -4225,7 +4225,6 @@ function resolveVirtualComponent (vnode) {
     beforeCreate: function beforeCreate () {
       // const vm: Component = this
 
-      // TODO: listen on all events and dispatch them to the
       // corresponding virtual components according to the componentId.
       // vm._virtualComponents = {}
       var createVirtualComponent = function (componentId, propsData) {

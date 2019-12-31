@@ -72,6 +72,7 @@ export default {
   },
 
   mounted () {
+    // NOTE: keepalive 这里并没有引起模板的刷新
     this.$watch('include', val => {
       pruneCache(this, name => matches(val, name))
     })
@@ -97,6 +98,7 @@ export default {
         return vnode
       }
 
+      // NOTE: keep-alive 可以缓存一个组件的不同实例, vnode.key 的值是多少
       const { cache, keys } = this
       const key: ?string = vnode.key == null
         // same constructor may get registered as different local components

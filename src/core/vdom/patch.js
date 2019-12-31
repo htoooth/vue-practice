@@ -697,6 +697,7 @@ export function createPatchFunction (backend) {
     }
   }
 
+  // NOTE: patch 在这里调用
   return function patch (oldVnode, vnode, hydrating, removeOnly) {
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) invokeDestroyHook(oldVnode)

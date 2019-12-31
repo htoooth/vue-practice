@@ -141,7 +141,7 @@ function callUpdatedHooks (queue) {
     const vm = watcher.vm
     if (vm._watcher === watcher && vm._isMounted && !vm._isDestroyed) {
 
-      // NOTE: HOOK 7 updated
+      // NOTE: HOOK 8 updated
       callHook(vm, 'updated')
     }
   }

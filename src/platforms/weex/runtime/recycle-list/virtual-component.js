@@ -111,7 +111,6 @@ export function resolveVirtualComponent (vnode: MountedComponentVNode): VNode {
     beforeCreate () {
       // const vm: Component = this
 
-      // TODO: listen on all events and dispatch them to the
       // corresponding virtual components according to the componentId.
       // vm._virtualComponents = {}
       const createVirtualComponent = (componentId, propsData) => {

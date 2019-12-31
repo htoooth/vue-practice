@@ -348,7 +348,7 @@ export function activateChildComponent (vm: Component, direct?: boolean) {
       activateChildComponent(vm.$children[i])
     }
 
-    // NOTE: HOOK 8 activated
+    // NOTE: HOOK 7 activated
     callHook(vm, 'activated')
   }
 }

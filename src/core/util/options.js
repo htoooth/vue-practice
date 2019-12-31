@@ -169,6 +169,7 @@ function dedupeHooks (hooks) {
   return res
 }
 
+// NOTE: HOOK mixin stragegy
 LIFECYCLE_HOOKS.forEach(hook => {
   strats[hook] = mergeHook
 })
@@ -195,6 +196,7 @@ function mergeAssets (
   }
 }
 
+// NOTE: INIT 资产的合并逻辑
 ASSET_TYPES.forEach(function (type) {
   strats[type + 's'] = mergeAssets
 })
@@ -411,6 +413,7 @@ export function mergeOptions (
       parent = mergeOptions(parent, child.extends, vm)
     }
     if (child.mixins) {
+      // NOTE: HOOK mixins
       for (let i = 0, l = child.mixins.length; i < l; i++) {
         parent = mergeOptions(parent, child.mixins[i], vm)
       }
