@@ -53,40 +53,34 @@
 
 let Child = Vue.component('child', Vue.extend({
   name: 'huangtaoPage',
-  template: '<div><span>child msg: {{msg2}}</span></div>',
+  template: '<div><span>child msg: {{ msg }}</span></div>',
   props: {
-    msg: {
-      type: Object
-    }
-  },
-  data() {
-    return {
-      msg2: this.msg
-    }
-  },
-  mounted() {
+    msg: Object
   }
 }))
 
 const vm = new Vue({
   name: 'parent',
   template: `<div>
+                  parent msg: {{msg}}
                   <child :msg="msg"></child>
             </div>`,
   data() {
     return {
       msg: {
-        m: 'fdsafdsafd'
+        msg1: {
+          msg2: 'fdsfdas'
+        }
       },
       msg2: 'world'
     }
   }
 }).$mount('#demo')
 
-console.log('===========completed======================');
+console.log('========completed========');
 
 setTimeout(() => {
-  vm.msg.m = 'world'
+  vm.msg.msg1.msg2 = 'world'
 }, 3000)
 
 // var a = {
