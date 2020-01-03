@@ -78,7 +78,7 @@ export function pushTarget (target: ?Watcher, key, vm) {
 
 // NOTE: DEP !popTarget 移出依赖
 export function popTarget (key, vm) {
-  const pre = targetStack.map(i => '-').join('');
+  const pre = targetStack.map(() => '-').join('');
   const target = targetStack.pop()
   vm.log(`%c${pre}removeTarget:${key || ''}:remove=>%s,removeWatcher=>%o, targetWatcher=>%o`, 'background: yellow; color: black; display: block;',targetStack.length, target, targetStack[targetStack.length - 1]);
   Dep.target = targetStack[targetStack.length - 1]
