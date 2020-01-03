@@ -211,7 +211,6 @@ export function mountComponent (
   } else {
     // NOTE: REDNER FLOW 0 render init
     updateComponent = () => {
-      debugger
       // NOTE: DEP 8 立刻调用 render 方法，返回 vnode
       // NOTE: DEP 9 立刻调用 update 方法
       vm._update(vm._render(), hydrating)
