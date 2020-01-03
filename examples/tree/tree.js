@@ -55,7 +55,7 @@ let Child = Vue.component('child', Vue.extend({
   name: 'huangtaoPage',
   template: '<div><span>child msg: {{ msg }}</span></div>',
   props: {
-    msg: String
+    msg: Object
   }
 }))
 
@@ -67,16 +67,20 @@ const vm = new Vue({
             </div>`,
   data() {
     return {
-      msg: 'hello',
+      msg: {
+        msg1: {
+          msg2: 'fdsfdas'
+        }
+      },
       msg2: 'world'
     }
   }
 }).$mount('#demo')
 
-console.log('completed');
+console.log('========completed========');
 
 setTimeout(() => {
-  vm.msg = 'world'
+  vm.msg.msg1.msg2 = 'world'
 }, 3000)
 
 // var a = {

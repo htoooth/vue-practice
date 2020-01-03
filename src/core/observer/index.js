@@ -201,8 +201,11 @@ export function defineReactive(
     },
     set: function reactiveSetter(newVal) {
       const value = getter ? getter.call(obj) : val
+
+      vm.log('data [%s] compare=== oldVal[%o] newVal[%o]', key, value, newVal);
       /* eslint-disable no-self-compare */
       if (newVal === value || (newVal !== newVal && value !== value)) {
+        vm.log('data [%s] no change oldVal[%o]', key, value);
         return
       }
       /* eslint-enable no-self-compare */
@@ -223,7 +226,7 @@ export function defineReactive(
       // NOTE: DEP !depend 通知改变
 
       vm.log(`data [%s] has changed oldVal[%o]=>newVal[%o]`, key, value, newVal);
-      dep.notify()
+      dep.notify(vm)
     }
   })
 }

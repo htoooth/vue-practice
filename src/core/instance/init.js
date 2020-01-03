@@ -85,6 +85,8 @@ export function initMixin (Vue: Class<Component>) {
       vm._debug(...args)
     }
 
+    vm.log('init component start')
+
     // NOTE: CORE FLOW 5 初始化所有的配置
 
     // NOTE: CORE INIT MIXIN lifecycle 初始化，abstract 抽象组件
@@ -127,9 +129,9 @@ export function initMixin (Vue: Class<Component>) {
     if (vm.$options.el) {
     // NOTE: CORE INIT MIXIN $mount 挂载
 
-      vm.log('$mout start');
+      vm.log('$mount start');
       vm.$mount(vm.$options.el)
-      vm.log('$mout end');
+      vm.log('$mount end');
     }
   }
 }

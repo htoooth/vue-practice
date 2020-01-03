@@ -38,7 +38,7 @@ export default class Dep {
     }
   }
 
-  notify () {
+  notify (vm) {
     // stabilize the subscriber list first
     const subs = this.subs.slice()
     if (process.env.NODE_ENV !== 'production' && !config.async) {
@@ -47,6 +47,8 @@ export default class Dep {
       // order
       subs.sort((a, b) => a.id - b.id)
     }
+
+    vm.log('notify=>start');
     for (let i = 0, l = subs.length; i < l; i++) {
       subs[i].update()
     }
@@ -76,7 +78,7 @@ export function pushTarget (target: ?Watcher, key, vm) {
 
 // NOTE: DEP !popTarget 移出依赖
 export function popTarget (key, vm) {
-  const pre = targetStack.map(i => '-').join('');
+  const pre = targetStack.map(() => '-').join('');
   const target = targetStack.pop()
   vm.log(`%c${pre}removeTarget:${key || ''}:remove=>%s,removeWatcher=>%o, targetWatcher=>%o`, 'background: yellow; color: black; display: block;',targetStack.length, target, targetStack[targetStack.length - 1]);
   Dep.target = targetStack[targetStack.length - 1]
