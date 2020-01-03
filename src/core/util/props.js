@@ -48,7 +48,7 @@ export function validateProp (
     // make sure to observe it.
     const prevShouldObserve = shouldObserve
     toggleObserving(true)
-    observe(value)
+    observe.call(vm, value)
     toggleObserving(prevShouldObserve)
   }
   if (

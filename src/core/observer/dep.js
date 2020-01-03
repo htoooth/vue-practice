@@ -18,12 +18,13 @@ export default class Dep {
 
   constructor () {
     this.id = uid++
+    console.log('new Dep id =>', this.id);
     this.subs = []
   }
 
   addSub (sub: Watcher) {
     this.subs.push(sub)
-    console.log('dep add wather dep=>%o addSub watcher=>%o')
+    sub.vm.log('%cDep dep watcher add watcher=>%o addSub watcher=>%o', 'background: green; color: white; display: block;' ,this, sub)
   }
 
   removeSub (sub: Watcher) {
@@ -65,18 +66,18 @@ Dep.target = null
 const targetStack = []
 
 // NOTE: DEP !pushTarget 添加依赖
-export function pushTarget (target: ?Watcher, key) {
+export function pushTarget (target: ?Watcher, key, vm) {
   targetStack.push(target)
   Dep.target = target
 
   const pre = targetStack.map(() => '+').join('');
-  console.log(`${pre}pushTarget:${key || ''}:push=>%s, targetWatcher=>`, targetStack.length, Dep.target);
+  vm.log(`%c${pre}pushTarget:${key || ''}:push=>%s, targetWatcher=>`, 'background: yellow; color: black; display: block;',targetStack.length, Dep.target);
 }
 
 // NOTE: DEP !popTarget 移出依赖
-export function popTarget (key) {
+export function popTarget (key, vm) {
   const pre = targetStack.map(i => '-').join('');
   const target = targetStack.pop()
-  console.log(`${pre}removeTarget:${key || ''}:remove=>%s,removeWatcher=>%o, targetWatcher=>%o`, targetStack.length, target, targetStack[targetStack.length - 1]);
+  vm.log(`%c${pre}removeTarget:${key || ''}:remove=>%s,removeWatcher=>%o, targetWatcher=>%o`, 'background: yellow; color: black; display: block;',targetStack.length, target, targetStack[targetStack.length - 1]);
   Dep.target = targetStack[targetStack.length - 1]
 }

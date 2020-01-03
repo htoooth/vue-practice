@@ -40,16 +40,16 @@ export function initRender (vm: Component) {
 
   /* istanbul ignore else */
   if (process.env.NODE_ENV !== 'production') {
-    defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, () => {
+    defineReactive.call(vm, vm, '$attrs', parentData && parentData.attrs || emptyObject, () => {
       !isUpdatingChildComponent && warn(`$attrs is readonly.`, vm)
     }, true)
-    defineReactive(vm, '$listeners', options._parentListeners || emptyObject, () => {
+    defineReactive.call(vm, vm, '$listeners', options._parentListeners || emptyObject, () => {
       !isUpdatingChildComponent && warn(`$listeners is readonly.`, vm)
     }, true)
   } else {
     // QUESTION: RENDER attrs listeners 从哪里来的
-    defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, null, true)
-    defineReactive(vm, '$listeners', options._parentListeners || emptyObject, null, true)
+    defineReactive.call(vm, vm, '$attrs', parentData && parentData.attrs || emptyObject, null, true)
+    defineReactive.call(vm, vm, '$listeners', options._parentListeners || emptyObject, null, true)
   }
 }
 
@@ -97,7 +97,7 @@ export function renderMixin (Vue: Class<Component>) {
 
       // NOTE: CORE FUNCTION _render call
       vnode = render.call(vm._renderProxy, vm.$createElement)
-      console.log('rendered vnode');
+      vm.log('rendered component');
     } catch (e) {
       handleError(e, vm, `render`)
       // return error render result,

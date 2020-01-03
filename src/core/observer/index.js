@@ -41,15 +41,16 @@ export class Observer {
   dep: Dep;
   vmCount: number; // number of vms that have this object as root $data
 
-  constructor (value: any) {
+  constructor (value: any, vm: any) {
     this.value = value
+    this.vm = vm
     // NOTE: CORE FUNCTION 收集依赖
 
     this.dep = new Dep()
     this.vmCount = 0
     def(value, '__ob__', this)
 
-    console.log('new Observer=>', value);
+    vm.log('%cnew Observer=>', 'background: blue; color: white; display: block;',value);
 
     // NOTE: CORE FUNCTION value 只有可能是数组和对象
     if (Array.isArray(value)) {
@@ -77,7 +78,7 @@ export class Observer {
   walk(obj: Object) {
     const keys = Object.keys(obj)
     for (let i = 0; i < keys.length; i++) {
-      defineReactive(obj, keys[i])
+      defineReactive.call(this.vm, obj, keys[i])
     }
   }
 
@@ -86,7 +87,7 @@ export class Observer {
    */
   observeArray(items: Array<any>) {
     for (let i = 0, l = items.length; i < l; i++) {
-      observe(items[i])
+      observe.call(this.vm, items[i])
     }
   }
 }
@@ -126,7 +127,8 @@ export function observe(value: any, asRootData: ?boolean): Observer | void {
     return
   }
 
-  console.log('**observe value**', value);
+  let vm = this;
+  vm.log('%c**observe value**', 'background: blue; color: white; display: block;', value);
 
   let ob: Observer | void
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
@@ -138,7 +140,7 @@ export function observe(value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
-    ob = new Observer(value)
+    ob = new Observer(value, vm)
   }
   if (asRootData && ob) {
     ob.vmCount++
@@ -159,6 +161,7 @@ export function defineReactive(
   shallow?: boolean
 ) {
   const dep = new Dep()
+  const vm = this;
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
@@ -172,9 +175,9 @@ export function defineReactive(
     val = obj[key]
   }
 
-  let childOb = !shallow && observe(val)
+  let childOb = !shallow && observe.call(vm, val)
 
-  console.log('**defineReactive** obj=>%s key=>%s val=>%s', obj, key, val)
+  this.log('%c**defineReactive** obj=>%s key=>%s val=>%o', 'background: blue; color: white; display: block;',obj, key, val)
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
@@ -185,7 +188,7 @@ export function defineReactive(
       // NOTE: DEP !depend 依赖收集
       // NOTE: DEP 513 getter value
       if (Dep.target) {
-        console.log('!object get dep key=>%s dep=>%o ADD  watch=>%o', key, dep,Dep.target);
+        Dep.target.vm.log(`%cDep !object get dep key=>%s dep=>%o ADD  watch=>%o`, 'background: green; color: white; display: block;' ,key, dep,Dep.target);
         dep.depend()
         if (childOb) {
           childOb.dep.depend()
@@ -215,10 +218,11 @@ export function defineReactive(
       }
 
       // NOTE: DEP 新值也观察
-      childOb = !shallow && observe(newVal)
+      childOb = !shallow && observe.call(vm, newVal)
 
-      debugger
       // NOTE: DEP !depend 通知改变
+
+      vm.log(`data [%s] has changed val=>[%o]`, key, newVal);
       dep.notify()
     }
   })

@@ -43,6 +43,8 @@ export function initExtend (Vue: GlobalAPI) {
       Super.options,
       extendOptions
     )
+
+    debugger;
     Sub['super'] = Super
 
     // For props and computed properties, we define the proxy getters on

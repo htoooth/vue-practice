@@ -22,7 +22,7 @@ export function initInjections (vm: Component) {
       // NOTE: UTIL 判断调试版本和线上
       if (process.env.NODE_ENV !== 'production') {
         // NOTE: INJECT 变成响应式
-        defineReactive(vm, key, result[key], () => {
+        defineReactive.call(vm, vm, key, result[key], () => {
           warn(
             `Avoid mutating an injected value directly since the changes will be ` +
             `overwritten whenever the provided component re-renders. ` +
@@ -31,7 +31,7 @@ export function initInjections (vm: Component) {
           )
         })
       } else {
-        defineReactive(vm, key, result[key])
+        defineReactive.call(vm, vm, key, result[key])
       }
     })
     toggleObserving(true)

@@ -76,11 +76,11 @@ export function lifecycleMixin (Vue: Class<Component>) {
       // initial render
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
 
-      console.log('update ok');
     } else {
       // NOTE: CORE FUNCTION $el 出现了 html 的元素
       vm.$el = vm.__patch__(prevVnode, vnode)
     }
+    vm.log('updated component');
     restoreActiveInstance()
     // update __vue__ reference
     if (prevEl) {
@@ -210,6 +210,7 @@ export function mountComponent (
   } else {
     // NOTE: REDNER FLOW 0 render init
     updateComponent = () => {
+      debugger
       // NOTE: DEP 8 立刻调用 render 方法，返回 vnode
       // NOTE: DEP 9 立刻调用 update 方法
       vm._update(vm._render(), hydrating)
@@ -222,7 +223,7 @@ export function mountComponent (
   // NOTE: REDNER FLOW 1 init updateComponent render
   // NOTE: DEP 7 初始化完成，建立 watcher
   // NOTE: CORE FLOW 10 render 并 update
-  console.log('new Watcher $mount');
+  vm.log('%c new Watcher $mount start', 'background: black; color: white; display: block;');
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted && !vm._isDestroyed) {
@@ -233,6 +234,7 @@ export function mountComponent (
   }, true /* isRenderWatcher */)
   hydrating = false
 
+  vm.log('%c new Watcher $mount end', 'background: black; color: white; display: block;');
   // manually mounted instance, call mounted on self
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
@@ -240,6 +242,8 @@ export function mountComponent (
     // NOTE: HOOK 5 mounted
     callHook(vm, 'mounted')
   }
+
+  vm.log('=============init end===================')
   return vm
 }
 
@@ -371,15 +375,13 @@ export function deactivateChildComponent (vm: Component, direct?: boolean) {
   }
 }
 
-let count = 1
-
 // NOTE: HOOK 1 invoke options 中的生命周期方法
 export function callHook (vm: Component, hook: string) {
   // #7573 disable dep collection when invoking lifecycle hooks
 
-  pushTarget(null,`hook:${hook}`,)
+  pushTarget(null,`hook[${hook}]`, vm)
   const handlers = vm.$options[hook]
-  console.log(count++,'lifeCycle-hook=>', hook)
+  vm.log(`%c ${vm._count++}:lifeCycle-hook=>%s`, 'background: red; color: white; display: block;', hook)
   const info = `${hook} hook`
   if (handlers) {
     for (let i = 0, j = handlers.length; i < j; i++) {
@@ -391,5 +393,5 @@ export function callHook (vm: Component, hook: string) {
   if (vm._hasHookEvent) {
     vm.$emit('hook:' + hook)
   }
-  popTarget(`hook:${hook}`)
+  popTarget(`hook[${hook}]`, vm)
 }

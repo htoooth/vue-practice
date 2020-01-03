@@ -3,19 +3,29 @@
 // vm <- getA <- a
 // pushTarget => Dep.target = vm
 // d <- watch <- a
+
+// Vue.component('Hi', Vue.extend({
+//   name: 'helloworld',
+//   props: {
+//     msg: {
+//       type: String
+//     }
+//   },
+//   data() {
+//     return {}
+//   },
+//   render() {
+//     return (<span>{this.msg}</span>)
+//   }
+// }))
+
 // const vm = new Vue({
-//   template: '<div>{{ getA() }}</div>',
+//   template: '<div>{{ c.x }}</div>',
 //   data: {
 //     a: 1,
 //     d: 2
 //   },
 //   mounted() {
-//     this.a++
-//   },
-//   methods: {
-//     getA() {
-//       return this.a
-//     }
 //   },
 //   computed: {
 //     b() {
@@ -27,18 +37,13 @@
 //       };
 //     }
 //   },
-//   watch: {
-//     d() {
-//       this.a = 1;
-//     }
-//   }
 // }).$mount('#demo')
-
 
 // setTimeout(() => {
 //   vm.a = 2
-// }, 2000)
+// }, 10000)
 
+// console.log('setTimout=>');
 // window.vueVisiable = {
 //   Dep: {
 //     target: null,
@@ -46,89 +51,66 @@
 //   }
 // };
 
-// let Child = {
-//   name: 'child',
-//   template: '<div><span>{{ localMsg }}</span><button @click="change">click</button></div>',
-//   data: function() {
-//     return {
-//       localMsg: this.msg
-//     }
-//   },
-//   props: {
-//     msg: String
-//   },
-//   methods: {
-//     change() {
-//       this.$emit('update:msg', 'world')
-//     }
+let Child = Vue.component('child', Vue.extend({
+  name: 'huangtaoPage',
+  template: '<div><span>child msg: {{ msg }}</span></div>',
+  props: {
+    msg: String
+  }
+}))
+
+const vm = new Vue({
+  name: 'parent',
+  template: `<div>
+                  parent msg: {{msg}}
+                  <child :msg="msg"></child>
+            </div>`,
+  data() {
+    return {
+      msg: 'hello',
+      msg2: 'world'
+    }
+  }
+}).$mount('#demo')
+
+console.log('completed');
+
+setTimeout(() => {
+  vm.msg = 'world'
+}, 3000)
+
+// var a = {
+//   b() {
+//     return this
 //   }
 // }
 
-// const vm = new Vue({
-//   template: `<div>
-//                   <child :msg.sync="msg"></child>
-//                   <div>settimeout: {{c}}</div>
-//             </div>`,
-//   beforeUpdate() {
-//   },
-//   data() {
-//     return {
-//       msg: 'hello',
-//       a: 1
-//     }
-//   },
-//   computed: {
-//     b() {
-//       return this.a + 1;
-//     },
-//     c() {
-//       return {
-//         x: this.b + 1
-//       };
-//     }
-//   },
-//   components: {
-//     Child
+// var b = {
+//   b: () => {
+//     eval('console.log(this)')
+//     return this
 //   }
-// }).$mount('#demo')
+// }
 
+// console.log('a.b=>', a.b())
+// console.log('b.b=>',b.b())
+// var c = b.b.bind(a)
 
-// setTimeout(() => {
-//   vm.a = 3
-// }, 3000)
+// var x = {
+//   y:c
+// }
 
-var a = {
-  b() {
-    return this
-  }
-}
+// console.log('b.b.bind(a)=>',c())
+// console.log('x.y()=>', x.y())
 
-var b = {
-  b: () => {
-    eval('console.log(this)')
-    return this
-  }
-}
+// (
+//   () => {
+//     console.log('out=>',(() => console.log('this=>',this))())
+//   }
+// )()
 
-console.log('a.b=>', a.b())
-console.log('b.b=>',b.b())
-var c = b.b.bind(a)
+// this
 
-var x = {
-  y:c
-}
+// window
 
-console.log('b.b.bind(a)=>',c())
-console.log('x.y()=>', x.y())
-
-(
-  () => {
-    console.log('out=>',(() => console.log('this=>',this))())
-  }
-)()
-
-this
-
-window
-
-this
+// this

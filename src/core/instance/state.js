@@ -63,7 +63,7 @@ export function initState (vm: Component) {
   if (opts.data) {
     initData(vm)
   } else {
-    observe(vm._data = {}, true /* asRootData */)
+    observe.call(vm, vm._data = {}, true /* asRootData */)
   }
 
   // NOTE: CORE INIT MIXIN STATE computed 初始化
@@ -79,6 +79,8 @@ export function initState (vm: Component) {
 
 function initProps (vm: Component, propsOptions: Object) {
   const propsData = vm.$options.propsData || {}
+
+  vm.log('props data =>', propsData);
   const props = vm._props = {}
   // cache prop keys so that future props updates can iterate using Array
   // instead of dynamic object key enumeration.
@@ -90,7 +92,7 @@ function initProps (vm: Component, propsOptions: Object) {
   }
   for (const key in propsOptions) {
     keys.push(key)
-    console.log('props init key=>', key)
+    vm.log('props init key=>', key)
     const value = validateProp(key, propsOptions, propsData, vm)
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
@@ -102,7 +104,7 @@ function initProps (vm: Component, propsOptions: Object) {
           vm
         )
       }
-      defineReactive(props, key, value, () => {
+      defineReactive.call(vm, props, key, value, () => {
         if (!isRoot && !isUpdatingChildComponent) {
           warn(
             `Avoid mutating a prop directly since the value will be ` +
@@ -115,7 +117,7 @@ function initProps (vm: Component, propsOptions: Object) {
       })
     } else {
       // NOTE: DEP 31 props defineReactive 的设置
-      defineReactive(props, key, value)
+      defineReactive.call(vm, props, key, value)
     }
     // static props are already proxied on the component's prototype
     // during Vue.extend(). We only need to proxy props defined at
@@ -169,24 +171,27 @@ function initData (vm: Component) {
     }
   }
 
-  console.log('data init =>', keys)
+  vm.log('data init reactive start=>', keys)
   // observe data
   // QUESTION: DEP observe， proxy, defineReactive 的区别和联系
   // NOTE: DEP 41 data observe 的设置
-  observe(data, true /* asRootData */)
+  observe.call(vm, data, true /* asRootData */)
+
+  vm.log('data init reactive end=>', keys)
 }
 
 export function getData (data: Function, vm: Component): any {
   // #7573 disable dep collection when invoking data getters
-  pushTarget(null, 'getData')
+  pushTarget(null, `getData`, vm)
   try {
+    vm.log('data init getData');
     // NOTE: CORE FUNCTION data 也绑定了 vm
     return data.call(vm, vm)
   } catch (e) {
     handleError(e, vm, `data()`)
     return {}
   } finally {
-    popTarget('getData')
+    popTarget('getData', vm)
   }
 }
 
@@ -212,7 +217,7 @@ function initComputed (vm: Component, computed: Object) {
     if (!isSSR) {
       // create internal watcher for the computed property.
 
-      console.log('computed init =>', key)
+      vm.log('computed init =>', key)
       // NOTE: DEP 52 watch computed
       watchers[key] = new Watcher(
         vm,
@@ -278,12 +283,12 @@ function createComputedGetter (key) {
     // NOTE: DEP 59 watcher value
     if (watcher) {
       if (watcher.dirty) {
-        console.log('computed get value key=>', key)
+        this.log('computed get value key=>', key)
         // NOTE: DEP 510 data getter
         watcher.evaluate()
       }
       if (Dep.target) {
-        console.log('!computed get dep key=>%s dep=>%o Add watcher=>%o', key, watcher, Dep.target)
+        this.log('%c !computed get dep key=>%s dep=>%o Add watcher=>%o', 'background: green; color: white; display: block;', key, watcher, Dep.target)
         // NOTE: DEP 511 depend
         watcher.depend()
       }
@@ -402,7 +407,7 @@ export function stateMixin (Vue: Class<Component>) {
     options?: Object
   ): Function {
     const vm: Component = this
-    console.log('$watch init exp=>%s cb=>%s options=>%o', expOrFn, cb, options);
+    vm.log('$watch init exp=>%s cb=>%s options=>%o', expOrFn, cb, options);
     if (isPlainObject(cb)) {
       return createWatcher(vm, expOrFn, cb, options)
     }

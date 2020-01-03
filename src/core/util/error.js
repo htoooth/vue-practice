@@ -9,7 +9,7 @@ import { pushTarget, popTarget } from '../observer/dep'
 export function handleError (err: Error, vm: any, info: string) {
   // Deactivate deps tracking while processing error handler to avoid possible infinite rendering.
   // See: https://github.com/vuejs/vuex/issues/1505
-  pushTarget()
+  pushTarget(null, 'error' ,vm)
   try {
     if (vm) {
       let cur = vm
@@ -29,7 +29,7 @@ export function handleError (err: Error, vm: any, info: string) {
     }
     globalHandleError(err, vm, info)
   } finally {
-    popTarget()
+    popTarget('error', vm)
   }
 }
 

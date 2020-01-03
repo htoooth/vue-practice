@@ -51,7 +51,7 @@ export default class Watcher {
     isRenderWatcher?: boolean
   ) {
 
-    console.log('new Watcher() expOrFn=>%s cb=>%s', expOrFn, cb)
+    vm.log('new Watcher() expOrFn=>%s cb=>%s', expOrFn, cb)
 
     this.vm = vm
     if (isRenderWatcher) {
@@ -107,17 +107,16 @@ export default class Watcher {
    * Evaluate the getter, and re-collect dependencies.
    */
   get () {
-    debugger
     // NOTE: CORE FUNCTION 添加依赖
     // NOTE: REDNER FLOW 4 设置全局变量初始化 watcher
     // NOTE: DEP 54 set Dep.target = this
-    pushTarget(this, 'watcher:get')
+    pushTarget(this, '[watcher.get]', this.vm)
     let value
     const vm = this.vm
     try {
       // NOTE: REDNER FLOW 5 render 渲染出dom
       // NOTE: DEP 55 getter 求值
-      console.log('watcher getter call => %s', this.expression)
+      this.vm.log('%cwatcher getter call => %s','background: chocolate; color: white; display: block;', this.expression)
       value = this.getter.call(vm, vm)
     } catch (e) {
       if (this.user) {
@@ -133,7 +132,7 @@ export default class Watcher {
       }
       // NOTE: REDNER FLOW 6 移出 watcher
       // NOTE: DEP 56 set Dep.target = null
-      popTarget('watcher:get')
+      popTarget('[watcher.get]', this.vm)
       this.cleanupDeps()
     }
     return value
@@ -142,12 +141,12 @@ export default class Watcher {
   /**
    * Add a dependency to this directive.
    */
-  addDep (dep: Dep) {
+  addDep (dep) {
     const id = dep.id
     if (!this.newDepIds.has(id)) {
       this.newDepIds.add(id)
       this.newDeps.push(dep)
-      console.log('watcher dep add watcher=>%o addDep dep=>%o', this, dep)
+      this.vm.log('%cDep watcher dep add dep=>%o addDep dep=>%o', 'background: green; color: white; display: block;',this, dep)
       if (!this.depIds.has(id)) {
         dep.addSub(this)
       }
@@ -239,12 +238,12 @@ export default class Watcher {
    */
   // NOTE: DEP 58 update dep
   depend () {
-    console.log('watch dep start');
+    this.vm.log('watch dep start');
     let i = this.deps.length
     while (i--) {
       this.deps[i].depend()
     }
-    console.log('watch dep end');
+    this.vm.log('watch dep end');
   }
 
   /**
