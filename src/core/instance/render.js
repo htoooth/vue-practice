@@ -38,6 +38,9 @@ export function initRender (vm: Component) {
   // they need to be reactive so that HOCs using them are always updated
   const parentData = parentVnode && parentVnode.data
 
+  vm.log('init $attrs=>%o', parentData && parentData.attrs);
+  vm.log('init $listeners=>%o', options._parentListeners);
+
   /* istanbul ignore else */
   if (process.env.NODE_ENV !== 'production') {
     defineReactive.call(vm, vm, '$attrs', parentData && parentData.attrs || emptyObject, () => {
@@ -95,9 +98,10 @@ export function renderMixin (Vue: Class<Component>) {
       // when parent component is patched.
       currentRenderingInstance = vm
 
+      vm.log('%crender component start', 'background: black; color: white; display: block;');
       // NOTE: CORE FUNCTION _render call
       vnode = render.call(vm._renderProxy, vm.$createElement)
-      vm.log('rendered component');
+      vm.log('%crender component end', 'background: black; color: white; display: block;');
     } catch (e) {
       handleError(e, vm, `render`)
       // return error render result,

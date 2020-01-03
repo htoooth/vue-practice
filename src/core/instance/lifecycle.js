@@ -72,6 +72,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
     // NOTE: CORE FUNCTION __patch__
+    vm.log('%cupdate component start', 'background: black; color: white; display: block;');
     if (!prevVnode) {
       // initial render
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
@@ -80,7 +81,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
       // NOTE: CORE FUNCTION $el 出现了 html 的元素
       vm.$el = vm.__patch__(prevVnode, vnode)
     }
-    vm.log('updated component');
+    vm.log('%cupdate component end', 'background: black; color: white; display: block;');
     restoreActiveInstance()
     // update __vue__ reference
     if (prevEl) {
@@ -243,7 +244,6 @@ export function mountComponent (
     callHook(vm, 'mounted')
   }
 
-  vm.log('=============init end===================')
   return vm
 }
 
@@ -288,6 +288,8 @@ export function updateChildComponent (
     vm._vnode.parent = parentVnode
   }
   vm.$options._renderChildren = renderChildren
+
+  vm.log('prepatch:updateChildComponent');
 
   // update $attrs and $listeners hash
   // these are also reactive so they may trigger child update if the child

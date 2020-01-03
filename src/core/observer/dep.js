@@ -38,7 +38,7 @@ export default class Dep {
     }
   }
 
-  notify () {
+  notify (vm) {
     // stabilize the subscriber list first
     const subs = this.subs.slice()
     if (process.env.NODE_ENV !== 'production' && !config.async) {
@@ -47,6 +47,8 @@ export default class Dep {
       // order
       subs.sort((a, b) => a.id - b.id)
     }
+
+    vm.log('notify=>start');
     for (let i = 0, l = subs.length; i < l; i++) {
       subs[i].update()
     }
