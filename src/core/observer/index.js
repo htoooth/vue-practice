@@ -222,7 +222,7 @@ export function defineReactive(
 
       // NOTE: DEP !depend 通知改变
 
-      vm.log(`data [%s] has changed val=>[%o]`, key, newVal);
+      vm.log(`data [%s] has changed oldVal[%o]=>newVal[%o]`, key, value, newVal);
       dep.notify()
     }
   })
