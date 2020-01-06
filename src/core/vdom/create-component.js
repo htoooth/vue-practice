@@ -220,7 +220,10 @@ export function createComponentInstanceForVnode (
     options.render = inlineTemplate.render
     options.staticRenderFns = inlineTemplate.staticRenderFns
   }
-  return new vnode.componentOptions.Ctor(options)
+
+  const vm = new vnode.componentOptions.Ctor(options);
+  vm.log('init:createComponentInstance');
+  return vm;
 }
 
 function installComponentHooks (data: VNodeData) {

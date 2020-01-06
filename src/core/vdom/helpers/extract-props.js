@@ -22,6 +22,7 @@ export function extractPropsFromVNodeData (
     return
   }
   const res = {}
+
   const { attrs, props } = data
   if (isDef(attrs) || isDef(props)) {
     for (const key in propOptions) {

@@ -85,7 +85,7 @@ export function initMixin (Vue: Class<Component>) {
       vm._debug(...args)
     }
 
-    vm.log('init component start')
+    vm.log('init component instance start')
 
     // NOTE: CORE FLOW 5 初始化所有的配置
 
@@ -123,7 +123,7 @@ export function initMixin (Vue: Class<Component>) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
-    vm.log('init component end');
+    vm.log('init component instance end');
 
     // NOTE: CORE FLOW 6 $mount 挂载
     if (vm.$options.el) {

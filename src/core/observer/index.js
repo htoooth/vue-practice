@@ -188,7 +188,7 @@ export function defineReactive(
       // NOTE: DEP !depend 依赖收集
       // NOTE: DEP 513 getter value
       if (Dep.target) {
-        Dep.target.vm.log(`%cDep !object get dep key=>%s dep=>%o ADD  watch=>%o`, 'background: green; color: white; display: block;' ,key, dep,Dep.target);
+        Dep.target.vm.log(`%cDep !object get dep key=>[%s] dep=>%o ADD  watch=>%o`, 'background: green; color: white; display: block;' ,key, dep,Dep.target);
         dep.depend()
         if (childOb) {
           childOb.dep.depend()

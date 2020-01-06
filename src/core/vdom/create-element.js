@@ -41,6 +41,7 @@ export function createElement (
   if (isTrue(alwaysNormalize)) {
     normalizationType = ALWAYS_NORMALIZE
   }
+
   return _createElement(context, tag, data, children, normalizationType)
 }
 
@@ -51,6 +52,7 @@ export function _createElement (
   children?: any,
   normalizationType?: number
 ): VNode | Array<VNode> {
+  context.log('createVnode %s start', tag);
   if (isDef(data) && isDef((data: any).__ob__)) {
     process.env.NODE_ENV !== 'production' && warn(
       `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
@@ -118,6 +120,8 @@ export function _createElement (
     // direct component options / constructor
     vnode = createComponent(tag, data, context, children)
   }
+
+  context.log('createVnode %s end', tag);
   if (Array.isArray(vnode)) {
     return vnode
   } else if (isDef(vnode)) {

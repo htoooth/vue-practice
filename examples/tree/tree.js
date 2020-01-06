@@ -79,9 +79,9 @@ const vm = new Vue({
 
 console.log('========completed========');
 
-setTimeout(() => {
-  vm.msg.msg1.msg2 = 'world'
-}, 3000)
+// setTimeout(() => {
+//   vm.msg.msg1.msg2 = 'world'
+// }, 3000)
 
 // var a = {
 //   b() {
